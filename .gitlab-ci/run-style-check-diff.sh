@@ -9,17 +9,16 @@ set -e
 # could be running in a personal fork of the repository which has out of date
 # branches.
 if [ "${CI_PROJECT_NAMESPACE}" != "GNOME" ]; then
-    echo "Retrieving the current upstream repository from ${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}…"
     git remote add upstream https://gitlab.gnome.org/GNOME/glib.git
-    git fetch upstream
     ORIGIN="upstream"
 else
-    echo "Reusing the existing repository on ${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}"
     ORIGIN="origin"
 fi
 
-git remote -v
-git branch
+# Even if we reuse the existing remote configuration, we need to fetch it, since
+# CI jobs run with a shallow clone (by default), so we won’t have all the commit
+# graph data we need.
+git fetch "${ORIGIN}"
 
 # Work out the newest common ancestor between the detached HEAD that this CI job
 # has checked out, and the upstream target branch (which will typically be
