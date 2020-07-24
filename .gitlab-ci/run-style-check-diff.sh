@@ -18,6 +18,9 @@ else
     ORIGIN="origin"
 fi
 
+git remote -v
+git branch
+
 # Work out the newest common ancestor between the detached HEAD that this CI job
 # has checked out, and the upstream target branch (which will typically be
 # `upstream/master` or `upstream/glib-2-62`).
