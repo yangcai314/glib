@@ -17,6 +17,7 @@
 
 #include "config.h"
 
+#include "../glib/gvalgrind.h"
 #include <string.h>
 
 #include "gatomicarray.h"
@@ -76,6 +77,7 @@ freelist_alloc (gsize size, gboolean reuse)
   real_size = sizeof (gsize) + MAX (size, sizeof (FreeListNode));
   mem = g_slice_alloc (real_size);
   mem = ((char *) mem) + sizeof (gsize);
+  VALGRIND_MALLOCLIKE_BLOCK (mem, real_size - sizeof (gsize), FALSE, FALSE);
   G_ATOMIC_ARRAY_DATA_SIZE (mem) = size;
   return mem;
 }
